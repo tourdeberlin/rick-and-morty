@@ -1,0 +1,11 @@
+@use '../../../global-styles/variables.scss' as *;
+
+.button {
+  background-color: $button-color;
+  padding: 9px 31px;
+  border-radius: 7px;
+  font-weight: 500;
+  font-size: 17px;
+  text-align: center;
+  cursor: pointer;
+}

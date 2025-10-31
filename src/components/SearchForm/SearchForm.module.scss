@@ -1,0 +1,16 @@
+@use '../../global-styles/variables.scss' as *;
+
+.searchForm {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.searchInput {
+  width: 430px;
+  height: 40px;
+  pointer-events: auto;
+  border: 1px solid $button-color;
+  border-radius: 7px;
+  padding: 10px;
+
+}
