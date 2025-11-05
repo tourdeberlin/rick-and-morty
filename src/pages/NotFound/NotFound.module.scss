@@ -1,0 +1,56 @@
+.notFound {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+.logo {
+  width: 50vw;
+  max-width: 600px; 
+  height: auto;
+  margin-top: 5rem;
+  margin-bottom: 2rem;
+}
+
+.errorCode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  margin: 2rem 0;
+}
+
+.number {
+  font-size: 16rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.portal {
+  width: 190px;
+  height: auto;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.homeButton {
+  background-color: #ff0055;
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  font-size: 1.2rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.homeButton:hover {
+  background-color: #cc0044;
+}
