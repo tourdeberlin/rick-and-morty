@@ -1,71 +1,70 @@
 import './App.scss';
-import { Component } from 'react';
-import type { AppProps, AppState } from './types';
+import { useEffect, useState } from 'react';
+import type { Character } from './types';
 import Header from './components/Header/Header';
 import CardList from './components/CardList/CardList';
 import { fetchCharacters } from './services/characterService';
 import NoResults from './components/NoResults/NoResults';
 import Loader from './components/Loader/Loader';
 
-export default class App extends Component<AppProps, AppState> {
-  state: AppState = {
-    inputValue: '',
-    searchResults: [],
-    loading: false,
-    error: null,
-  };
+import React from 'react';
 
-  override componentDidMount = async (): Promise<void> => {
-    this.loadCharacters();
-  };
+const App: React.FC = () => {
+  const [inputValue, setInputValue] = useState<string>('');
+  const [searchResults, setSearchResults] = useState<Character[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  private handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    this.setState({ inputValue: e.target.value });
-  };
-
-  private handleSubmitButton = async (
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
-    e.preventDefault();
-    const { inputValue } = this.state;
-    this.loadCharacters(inputValue);
-    this.setState({ inputValue: '' });
-  };
-
-  private loadCharacters = async (inputValue: string = ''): Promise<void> => {
-    this.setState({ loading: true, error: null });
+  const loadCharacters = async (inputValue: string = ''): Promise<void> => {
+    setIsLoading(true);
+    setError(null);
 
     try {
       const results = await fetchCharacters(inputValue);
-      this.setState({ searchResults: results, loading: false });
+      setSearchResults(results);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      this.setState({ error: message, loading: false });
+      setError(message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  public override render() {
-    const { inputValue, searchResults, loading } = this.state;
+  useEffect(() => {
+    loadCharacters(inputValue);
+  }, []);
 
-    if (loading) {
-      return <Loader />;
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setInputValue(e.target.value);
+  };
 
-    return (
-      <div className="App">
-        <Header
-          inputValue={inputValue}
-          onInputChange={this.handleInputChange}
-          onSearchSubmit={this.handleSubmitButton}
-        />
-        {searchResults.length ? (
-          <CardList results={searchResults} />
-        ) : (
-          <NoResults />
-        )}
-      </div>
-    );
-  }
-}
+  const handleSubmitButton = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    e.preventDefault();
+    loadCharacters(inputValue);
+    setInputValue('');
+  };
+
+  return (
+    <div className="App">
+      <Header
+        inputValue={inputValue}
+        onInputChange={handleInputChange}
+        onSearchSubmit={handleSubmitButton}
+      />
+
+      {isLoading ? (
+        <Loader />
+      ) : searchResults.length ? (
+        <CardList results={searchResults} />
+      ) : (
+        <NoResults />
+      )}
+
+      {error && <div className="error">{error}</div>}
+    </div>
+  );
+};
+
+export default App;
