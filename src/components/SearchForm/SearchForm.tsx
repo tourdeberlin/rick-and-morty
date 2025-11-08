@@ -1,5 +1,6 @@
 import styles from './SearchForm.module.scss';
 import Button from '../UI/Button/Button';
+import React from 'react';
 
 interface SearchFormProps {
   inputValue: string;
